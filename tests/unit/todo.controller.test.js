@@ -32,16 +32,16 @@ describe("TodoController.createTodo", () => {
         The arguments are checked with the same algorithm that .toEqual uses.*/
         expect(todoModel.create).toBeCalledWith(newTodo);
     });
-    it('should return 201 response code', () => {
-        todoController.createTodo(req,res,next);
+    it('should return 201 response code', async() => {
+        await todoController.createTodo(req,res,next);
         //check response status
         expect(res.statusCode).toBe(201);
         //check if response has been called back
         expect(res._isEndCalled()).toBeTruthy();
     })
-    it('should return a JSON body in response', ()=> {
+    it('should return a JSON body in response', async ()=> {
         todoModel.create.mockReturnValue(newTodo);
-        todoController.createTodo(req,res,next);
+        await todoController.createTodo(req,res,next);
         
         // node mode http module -> _getJSONData()
         // remember : res = httpMocks.createResponse();
