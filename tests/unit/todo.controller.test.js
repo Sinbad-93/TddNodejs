@@ -31,7 +31,7 @@ describe("TodoController.getTodos", () => {
     it('should call todoModel.find({})',async () => {
         await todoController.getTodos(req,res,next);
         expect(todoModel.find).toBeCalledWith({});
-    })
+    });
     it("should return response with status 200 and all todos", async () => {
         todoModel.find.mockReturnValue(allTodos);
         await todoController.getTodos(req,res,next);
@@ -40,7 +40,15 @@ describe("TodoController.getTodos", () => {
         //check if response has been called back
         expect(res._isEndCalled()).toBeTruthy();
         expect(res._getJSONData()).toStrictEqual(allTodos);
-    })
+    });
+
+    it('should handle errors', async () => {
+        const errorMessage = { message : "Error finding"};
+        const rejectPromise = Promise.reject(errorMessage);
+        todoModel.find.mockReturnValue(rejectPromise);
+        await todoController.getTodos(req,res,next);
+        expect(next).toBeCalledWith(errorMessage);
+    });
 
 });
 
